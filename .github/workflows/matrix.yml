@@ -16,7 +16,15 @@ jobs:
   deployment:
     strategy:
       matrix:
-        environment: [staging]
+        environment:
+          - staging
+          - development
+        is-staging:
+          - ${{ endsWith(github.ref_name, '.staging') }}
+
+        exclude:
+          - environment: staging
+            is-staging: false
 
     environment:
       name: ${{ matrix.environment }}
@@ -27,4 +35,4 @@ jobs:
 
     steps:
       - name: Test
-        run: echo "Testing ${{ secrets.SECRET }}" "${{ vars.VARIABLE }}"
+        run: echo "Testing ${{ secrets.SECRET }} ${{ vars.VARIABLE }} ${{ matrix.environment }}"
