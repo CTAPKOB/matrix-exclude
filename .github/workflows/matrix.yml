@@ -24,7 +24,7 @@ jobs:
 
         exclude:
           - environment: staging
-            matrix.is-staging: false
+            is-staging: false
 
     environment:
       name: ${{ matrix.environment }}
