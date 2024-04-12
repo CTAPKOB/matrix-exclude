@@ -1,0 +1,30 @@
+name: Vercel Deploy Staging
+
+on:
+  push:
+
+# cancel in-progress runs on new commits to same PR (gitub.event.number)
+concurrency:
+  group: vercel-deploy-${{ github.workflow }}-${{ github.event.number || github.sha }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read # to fetch code (actions/checkout)
+  statuses: write # This is required for the GitHub Script createCommitStatus to work
+
+jobs:
+  deployment:
+    strategy:
+      matrix:
+        environment: [staging]
+
+    environment:
+      name: ${{ matrix.environment }}
+
+    timeout-minutes: 20
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test
+        run: echo "Testing ${{ secrets.SECRET }}" "${{ vars.VARIABLE }}"
